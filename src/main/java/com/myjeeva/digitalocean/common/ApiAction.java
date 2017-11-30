@@ -21,38 +21,7 @@
 
 package com.myjeeva.digitalocean.common;
 
-import com.myjeeva.digitalocean.pojo.Account;
-import com.myjeeva.digitalocean.pojo.Action;
-import com.myjeeva.digitalocean.pojo.Actions;
-import com.myjeeva.digitalocean.pojo.Backups;
-import com.myjeeva.digitalocean.pojo.Certificate;
-import com.myjeeva.digitalocean.pojo.Certificates;
-import com.myjeeva.digitalocean.pojo.Delete;
-import com.myjeeva.digitalocean.pojo.Domain;
-import com.myjeeva.digitalocean.pojo.DomainRecord;
-import com.myjeeva.digitalocean.pojo.DomainRecords;
-import com.myjeeva.digitalocean.pojo.Domains;
-import com.myjeeva.digitalocean.pojo.Droplet;
-import com.myjeeva.digitalocean.pojo.Droplets;
-import com.myjeeva.digitalocean.pojo.FloatingIP;
-import com.myjeeva.digitalocean.pojo.FloatingIPs;
-import com.myjeeva.digitalocean.pojo.Image;
-import com.myjeeva.digitalocean.pojo.Images;
-import com.myjeeva.digitalocean.pojo.Kernels;
-import com.myjeeva.digitalocean.pojo.Key;
-import com.myjeeva.digitalocean.pojo.Keys;
-import com.myjeeva.digitalocean.pojo.LoadBalancer;
-import com.myjeeva.digitalocean.pojo.LoadBalancers;
-import com.myjeeva.digitalocean.pojo.Neighbors;
-import com.myjeeva.digitalocean.pojo.Regions;
-import com.myjeeva.digitalocean.pojo.Response;
-import com.myjeeva.digitalocean.pojo.Sizes;
-import com.myjeeva.digitalocean.pojo.Snapshot;
-import com.myjeeva.digitalocean.pojo.Snapshots;
-import com.myjeeva.digitalocean.pojo.Tag;
-import com.myjeeva.digitalocean.pojo.Tags;
-import com.myjeeva.digitalocean.pojo.Volume;
-import com.myjeeva.digitalocean.pojo.Volumes;
+import com.myjeeva.digitalocean.pojo.*;
 
 /**
  * Enumeration of DigitalOcean RESTful resource information.
@@ -90,6 +59,7 @@ public enum ApiAction {
   DISABLE_DROPLET_BACKUPS("/droplets/%s/actions", "action", RequestMethod.POST, Action.class),
   ENABLE_DROPLET_PRIVATE_NETWORKING("/droplets/%s/actions", "action", RequestMethod.POST, Action.class),
   SNAPSHOT_DROPLET("/droplets/%s/actions", "action", RequestMethod.POST, Action.class),
+
 
   // Account
   GET_ACCOUNT_INFO("/account", "account", RequestMethod.GET, Account.class),
@@ -205,7 +175,12 @@ public enum ApiAction {
   AVAILABLE_CERTIFICATES("/certificates", "certificates", RequestMethod.GET, Certificates.class),
   GET_CERTIFICATE_INFO("/certificates/%s", "certificate", RequestMethod.GET, Certificate.class),
   CREATE_CERTIFICATE("/certificates", "certificate", RequestMethod.POST, Certificate.class),
-  DELETE_CERTIFICATE("/certificates/%s", "response", RequestMethod.DELETE, Delete.class);
+  DELETE_CERTIFICATE("/certificates/%s", "response", RequestMethod.DELETE, Delete.class),
+
+
+  //Firewalls
+  ADD_DROPLETS_TO_FIREWALL("firewalls/$s/droplets", "response", RequestMethod.POST, Response.class),
+  GET_ALL_FIREWALLS("/firewalls", "firewalls",RequestMethod.GET, Firewalls.class);
 
 
   private String path;

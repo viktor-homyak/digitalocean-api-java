@@ -26,40 +26,7 @@ import java.util.List;
 import com.myjeeva.digitalocean.common.ActionType;
 import com.myjeeva.digitalocean.exception.DigitalOceanException;
 import com.myjeeva.digitalocean.exception.RequestUnsuccessfulException;
-import com.myjeeva.digitalocean.pojo.Account;
-import com.myjeeva.digitalocean.pojo.Action;
-import com.myjeeva.digitalocean.pojo.Actions;
-import com.myjeeva.digitalocean.pojo.Backups;
-import com.myjeeva.digitalocean.pojo.Certificate;
-import com.myjeeva.digitalocean.pojo.Certificates;
-import com.myjeeva.digitalocean.pojo.Delete;
-import com.myjeeva.digitalocean.pojo.Domain;
-import com.myjeeva.digitalocean.pojo.DomainRecord;
-import com.myjeeva.digitalocean.pojo.DomainRecords;
-import com.myjeeva.digitalocean.pojo.Domains;
-import com.myjeeva.digitalocean.pojo.Droplet;
-import com.myjeeva.digitalocean.pojo.Droplets;
-import com.myjeeva.digitalocean.pojo.FloatingIP;
-import com.myjeeva.digitalocean.pojo.FloatingIPs;
-import com.myjeeva.digitalocean.pojo.ForwardingRules;
-import com.myjeeva.digitalocean.pojo.Image;
-import com.myjeeva.digitalocean.pojo.Images;
-import com.myjeeva.digitalocean.pojo.Kernels;
-import com.myjeeva.digitalocean.pojo.Key;
-import com.myjeeva.digitalocean.pojo.Keys;
-import com.myjeeva.digitalocean.pojo.LoadBalancer;
-import com.myjeeva.digitalocean.pojo.LoadBalancers;
-import com.myjeeva.digitalocean.pojo.Neighbors;
-import com.myjeeva.digitalocean.pojo.Regions;
-import com.myjeeva.digitalocean.pojo.Resource;
-import com.myjeeva.digitalocean.pojo.Response;
-import com.myjeeva.digitalocean.pojo.Sizes;
-import com.myjeeva.digitalocean.pojo.Snapshot;
-import com.myjeeva.digitalocean.pojo.Snapshots;
-import com.myjeeva.digitalocean.pojo.Tag;
-import com.myjeeva.digitalocean.pojo.Tags;
-import com.myjeeva.digitalocean.pojo.Volume;
-import com.myjeeva.digitalocean.pojo.Volumes;
+import com.myjeeva.digitalocean.pojo.*;
 
 /**
  * <p>
@@ -1817,13 +1784,41 @@ public interface DigitalOcean {
    *
    * @param certificateId the id of the certificate
    * @return {@link Delete}
+   * @throws DigitalOceanException        if request had interruption [
+   *                                      <code>HTTP status code &gt;= 400 &amp;&amp; &lt; 510</code>]
+   * @throws RequestUnsuccessfulException if any RESTful request unsuccessful from wrapper method
+   * @since v2.12
+   */
+  Delete deleteCertificate(String certificateId) throws DigitalOceanException,
+          RequestUnsuccessfulException;
+
+
+  /**
+   * Method allows you to add an additional forwarding rule to a Load Balancer instance.
+   *
+   * @param firewallID the id of the firewall
+   * @return {@link Response}
    * @throws DigitalOceanException if request had interruption [
    *         <code>HTTP status code &gt;= 400 &amp;&amp; &lt; 510</code>]
    * @throws RequestUnsuccessfulException if any RESTful request unsuccessful from wrapper method
    *
-   * @since v2.12
+   * @since
    */
-  Delete deleteCertificate(String certificateId) throws DigitalOceanException,
-      RequestUnsuccessfulException;
+  Response addDropletsToFirewall(List<Integer> dropletIds, String firewallID) throws DigitalOceanException,
+          RequestUnsuccessfulException;
+
+  /**
+   * Method returns all firewalls you currently have in your account.
+   * @param pageNo for pagination
+   * @param perPage no. of items per page
+   * @return {@link Firewalls}
+   * @throws DigitalOceanException if request had interruption [
+   *         <code>HTTP status code &gt;= 400 &amp;&amp; &lt; 510</code>]
+   * @throws RequestUnsuccessfulException if any RESTful request unsuccessful from wrapper method
+   *
+   * @since v2.0
+   **/
+  Firewalls getAvailableFirewalls(Integer pageNo, Integer perPage)
+          throws DigitalOceanException, RequestUnsuccessfulException;
 
 }

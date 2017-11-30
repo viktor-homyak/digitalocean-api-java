@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gson.annotations.SerializedName;
+import com.myjeeva.digitalocean.pojo.*;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -37,46 +39,6 @@ import com.myjeeva.digitalocean.common.StickySessionType;
 import com.myjeeva.digitalocean.exception.DigitalOceanException;
 import com.myjeeva.digitalocean.exception.RequestUnsuccessfulException;
 import com.myjeeva.digitalocean.impl.DigitalOceanClient;
-import com.myjeeva.digitalocean.pojo.Account;
-import com.myjeeva.digitalocean.pojo.Action;
-import com.myjeeva.digitalocean.pojo.Actions;
-import com.myjeeva.digitalocean.pojo.Backup;
-import com.myjeeva.digitalocean.pojo.Backups;
-import com.myjeeva.digitalocean.pojo.Certificate;
-import com.myjeeva.digitalocean.pojo.Certificates;
-import com.myjeeva.digitalocean.pojo.Delete;
-import com.myjeeva.digitalocean.pojo.Domain;
-import com.myjeeva.digitalocean.pojo.DomainRecord;
-import com.myjeeva.digitalocean.pojo.DomainRecords;
-import com.myjeeva.digitalocean.pojo.Domains;
-import com.myjeeva.digitalocean.pojo.Droplet;
-import com.myjeeva.digitalocean.pojo.Droplets;
-import com.myjeeva.digitalocean.pojo.FloatingIP;
-import com.myjeeva.digitalocean.pojo.FloatingIPs;
-import com.myjeeva.digitalocean.pojo.ForwardingRules;
-import com.myjeeva.digitalocean.pojo.HealthCheck;
-import com.myjeeva.digitalocean.pojo.Image;
-import com.myjeeva.digitalocean.pojo.Images;
-import com.myjeeva.digitalocean.pojo.Kernel;
-import com.myjeeva.digitalocean.pojo.Kernels;
-import com.myjeeva.digitalocean.pojo.Key;
-import com.myjeeva.digitalocean.pojo.Keys;
-import com.myjeeva.digitalocean.pojo.LoadBalancer;
-import com.myjeeva.digitalocean.pojo.LoadBalancers;
-import com.myjeeva.digitalocean.pojo.Neighbors;
-import com.myjeeva.digitalocean.pojo.Region;
-import com.myjeeva.digitalocean.pojo.Regions;
-import com.myjeeva.digitalocean.pojo.Resource;
-import com.myjeeva.digitalocean.pojo.Response;
-import com.myjeeva.digitalocean.pojo.Size;
-import com.myjeeva.digitalocean.pojo.Sizes;
-import com.myjeeva.digitalocean.pojo.Snapshot;
-import com.myjeeva.digitalocean.pojo.Snapshots;
-import com.myjeeva.digitalocean.pojo.StickySessions;
-import com.myjeeva.digitalocean.pojo.Tag;
-import com.myjeeva.digitalocean.pojo.Tags;
-import com.myjeeva.digitalocean.pojo.Volume;
-import com.myjeeva.digitalocean.pojo.Volumes;
 
 import junit.framework.TestCase;
 
@@ -102,6 +64,7 @@ public class DigitalOceanIntegrationTest extends TestCase {
    * This is testing values of my own respective to DigitalOcean account, to real-time integration
    * with API. So place your's for integration test case before use
    */
+
   private String authTokenRW = "";
   private Integer dropletIdForInfo = 10001; // to be placed before use
   private String volumeIdForInfo = "10001"; // to be placed before use
@@ -117,8 +80,7 @@ public class DigitalOceanIntegrationTest extends TestCase {
   private String domainIp = "127.0.0.1";
 
   private DigitalOcean apiClient = new DigitalOceanClient(authTokenRW);
-
-  // Droplet test cases
+    // Droplet test cases
 
   @Test
   public void testGetAvailableDroplets()
@@ -1418,6 +1380,39 @@ public class DigitalOceanIntegrationTest extends TestCase {
 
     assertNotNull(result);
     log.info("Delete Request Object: " + result);
+  }
+
+  @Test
+  public void testGetAvailableFirewalls()
+          throws DigitalOceanException, RequestUnsuccessfulException {
+
+    Firewalls firewalls = apiClient.getAvailableFirewalls(1, null);
+
+    assertNotNull(firewalls);
+    assertFalse((firewalls.getFirewalls().isEmpty()));
+
+    int i = 1;
+    for (Firewall firewall : firewalls.getFirewalls()) {
+      log.info(i++ + " -> " + firewall.toString());
+    }
+  }
+
+  @Test
+  public void testAddDropletsToFirewall()
+          throws DigitalOceanException, RequestUnsuccessfulException {
+    testGetAvailableDroplets();
+    testGetAvailableFirewalls();
+    Droplet droplet = apiClient.getAvailableDroplets(1,null).getDroplets().get(0);
+
+    List<Integer> dropletIds = new ArrayList<>();
+      dropletIds.add(droplet.getId());
+
+    Firewall firewall = apiClient.getAvailableFirewalls(1,null).getFirewalls().get(0);
+
+    Response result =
+            apiClient.addDropletsToFirewall(dropletIds,firewall.getId());
+    assertNotNull(result);
+
   }
 
 }
